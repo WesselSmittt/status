@@ -75,6 +75,8 @@ async function statusResponse(env) {
     headers: {
       "content-type": "application/json; charset=utf-8",
       "cache-control": "no-store",
+      // Zodat de footer van wesselsmit.com de status kan tonen
+      "access-control-allow-origin": "*",
     },
   });
 }
