@@ -1,0 +1,19 @@
+{
+  "name": "status",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-09-26",
+  "routes": [
+    { "pattern": "status.wesselsmit.com", "custom_domain": true }
+  ],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  // Elke 5 minuten alle sites controleren
+  "triggers": {
+    "crons": ["*/5 * * * *"]
+  },
+  "kv_namespaces": [
+    { "binding": "STATUS", "id": "68877ca6c5f342c684b108fd15682db9" }
+  ]
+}
