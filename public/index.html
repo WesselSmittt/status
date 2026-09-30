@@ -5,25 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Status · Wessel Smit</title>
   <meta name="description" content="Actuele status en uptime van de sites van Wessel Smit.">
-  <meta name="theme-color" content="#0a0f1e">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%230a0f1e'/><text x='50' y='66' font-size='52' text-anchor='middle' fill='%2300ff88' font-family='monospace' font-weight='bold'>&gt;_</text></svg>">
+  <meta name="theme-color" content="#0b0c0e">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230b0c0e'/><path d='M18 28h14l8 38 10-38h0l10 38 8-38h14L68 76H56L50 52 44 76H32Z' fill='%23ff5a1f'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0f1e;
-      --panel: rgba(16, 24, 44, 0.72);
-      --border: rgba(0, 212, 255, 0.16);
-      --text: #d6e2f5;
-      --muted: #7a8aa8;
-      --green: #00ff88;
-      --cyan: #00d4ff;
+      --bg: #0b0c0e;
+      --panel: #111316;
+      --border: #23272d;
+      --text: #e7e9ec;
+      --muted: #7c838d;
+      --green: #3ddc97;
+  --ok: #3ddc97;
+  --accent: #ff5a1f;
+      --cyan: #aab2bd;
       --amber: #ffb020;
-      --red: #ff3860;
+      --red: #ff4d5e;
       --empty: rgba(122, 138, 168, 0.18);
-      --radius: 12px;
-      --font: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --radius: 0;
+      --display: "Archivo", system-ui, sans-serif;
+  --font: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,40 +43,15 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    ::selection { background: var(--green); color: var(--bg); }
+    ::selection { background: var(--accent); color: var(--bg); }
 
-    .grid-overlay {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(0, 212, 255, 0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 212, 255, 0.045) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
-      -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
-    }
-
-    .scanlines {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      pointer-events: none;
-      background: repeating-linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.022) 0px,
-        rgba(255, 255, 255, 0.022) 1px,
-        transparent 1px,
-        transparent 3px
-      );
-    }
 
     /* ---------- Navigatie ---------- */
     .nav {
       position: sticky;
       top: 0;
       z-index: 40;
-      background: rgba(10, 15, 30, 0.85);
+      background: rgba(11, 12, 14, 0.85);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
@@ -98,14 +76,14 @@
       text-overflow: ellipsis;
     }
 
-    .user { color: var(--green); }
+    .user { color: var(--accent); }
     .path { color: var(--cyan); }
 
     .caret {
       display: inline-block;
       width: 0.55em;
       height: 1em;
-      background: var(--green);
+      background: var(--accent);
       vertical-align: -0.12em;
       margin-left: 0.2em;
       animation: blink 1s steps(1) infinite;
@@ -119,13 +97,13 @@
       color: var(--muted);
       text-decoration: none;
       padding: 0.35rem 0.6rem;
-      border-radius: 6px;
+      border-radius: 0;
       transition: color 0.2s, background 0.2s;
     }
 
     .back:hover, .back:focus-visible {
-      color: var(--green);
-      background: rgba(0, 255, 136, 0.08);
+      color: var(--accent);
+      background: rgba(255, 90, 31, 0.08);
       outline: none;
     }
 
@@ -141,7 +119,7 @@
     }
 
     .section-head { margin-bottom: 2rem; }
-    .section-head .cmd { font-size: 0.85rem; color: var(--green); }
+    .section-head .cmd { font-size: 0.85rem; color: var(--accent); }
     .section-head .cmd::before { content: "$ "; color: var(--muted); }
 
     .section-head h1 {
@@ -149,7 +127,6 @@
       font-weight: 800;
       color: #fff;
       margin-top: 0.25rem;
-      text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
     }
 
     /* Samenvatting bovenaan */
@@ -161,11 +138,11 @@
       margin-bottom: 1.5rem;
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: 0;
       --c: var(--muted);
     }
 
-    .summary.up { --c: var(--green); }
+    .summary.up { --c: var(--ok); }
     .summary.degraded { --c: var(--amber); }
     .summary.down { --c: var(--red); }
 
@@ -178,9 +155,8 @@
       flex-shrink: 0;
       width: 0.75rem;
       height: 0.75rem;
-      border-radius: 50%;
+      border-radius: 0;
       background: var(--c);
-      box-shadow: 0 0 12px var(--c);
     }
 
     .up .dot, .dot.up { animation: pulse 2s ease-in-out infinite; }
@@ -194,13 +170,13 @@
       padding: 1.25rem;
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: 0;
       animation: fade-in 0.5s ease both;
       animation-delay: calc(var(--i, 0) * 0.08s);
       --c: var(--muted);
     }
 
-    .service.up { --c: var(--green); }
+    .service.up { --c: var(--ok); }
     .service.degraded { --c: var(--amber); }
     .service.down { --c: var(--red); }
 
@@ -227,7 +203,7 @@
       margin-left: auto;
       font-size: 0.72rem;
       padding: 0.15rem 0.6rem;
-      border-radius: 999px;
+      border-radius: 0;
       color: var(--c);
       border: 1px solid currentColor;
       background: color-mix(in srgb, var(--c) 8%, transparent);
@@ -242,12 +218,12 @@
     }
 
     .bar {
-      border-radius: 2px;
+      border-radius: 0;
       background: var(--empty);
       transition: transform 0.15s, filter 0.15s;
     }
 
-    .bar.up { background: var(--green); }
+    .bar.up { background: var(--ok); }
     .bar.degraded { background: var(--amber); }
     .bar.down { background: var(--red); }
     .bar:hover { transform: scaleY(1.15); filter: brightness(1.3); }
@@ -281,7 +257,7 @@
     }
 
     .legend { display: inline-flex; align-items: center; gap: 0.35rem; margin-right: 1rem; }
-    .legend i { width: 0.6rem; height: 0.6rem; border-radius: 2px; display: inline-block; }
+    .legend i { width: 0.6rem; height: 0.6rem; border-radius: 0; display: inline-block; }
 
     footer {
       position: relative;
@@ -298,6 +274,146 @@
       .summary { flex-wrap: wrap; }
       .summary .meta { margin-left: 0; text-align: left; width: 100%; }
     }
+    /* ---------- Tech-stijl, gelijk aan wesselsmit.com ---------- */
+    .nav-inner { padding-top: 0; padding-bottom: 0; min-height: 52px; }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      flex: none;
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: var(--display);
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 0.85rem;
+    }
+
+    .brand-text { overflow: hidden; text-overflow: ellipsis; }
+    .brand .crumb { color: var(--muted); font-weight: 400; }
+
+    .back {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .back:hover, .back:focus-visible { background: var(--panel); }
+
+    h1, .section-head h1, .card h2, .service-head h2, dialog h2 {
+      font-family: var(--display);
+      font-stretch: 125%;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+
+    .section-head h1 { font-size: clamp(2rem, 7vw, 3.4rem); margin-top: 0.6rem; }
+
+    .section-head .cmd {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-head .cmd::before { content: "■ "; color: var(--accent); }
+
+    .card-icon {
+      width: auto;
+      height: auto;
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      background: none;
+      border: 0;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 2px;
+      width: 0;
+      background: var(--accent);
+      transition: width 0.35s ease;
+    }
+
+    .card:not(.disabled):hover::after, .card:not(.disabled):focus-visible::after { width: 100%; }
+    .card:not(.disabled):hover { background: #16191d; }
+    .card h2 { font-size: 1.35rem; }
+
+    .card.disabled {
+      filter: none;
+      border-style: solid;
+      background: repeating-linear-gradient(135deg, transparent 0 10px, rgba(255, 255, 255, 0.018) 10px 20px), var(--panel);
+    }
+
+    .badge, .state {
+      font-size: 0.66rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .btn {
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+    }
+
+    .btn:not(.ghost):not(.danger):not(.warn):not(:disabled):hover { background: var(--text); border-color: var(--text); }
+
+    .terminal-bar span { display: none; }
+
+    .terminal-bar em {
+      margin-left: 0;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .terminal-bar em::before { content: "■ "; color: var(--accent); }
+
+    .terminal { position: relative; }
+
+    .terminal::before, .terminal::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border: 0 solid var(--accent);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .terminal::before { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; }
+    .terminal::after { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
+
+    footer {
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
@@ -309,12 +425,10 @@
   </style>
 </head>
 <body>
-  <div class="grid-overlay" aria-hidden="true"></div>
-  <div class="scanlines" aria-hidden="true"></div>
 
   <header class="nav">
     <nav class="nav-inner" aria-label="Navigatie">
-      <a href="https://wesselsmit.com/" class="nav-prompt"><span class="user">wessel</span>@smit:<span class="path">~/status</span>$<span class="caret"></span></a>
+      <a href="https://wesselsmit.com/" class="brand"><span class="brand-mark" aria-hidden="true">W</span><span class="brand-text">WESSEL SMIT <span class="crumb">/ STATUS</span></span></a>
       <a href="https://wesselsmit.com/" class="back">← portfolio</a>
     </nav>
   </header>
