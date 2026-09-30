@@ -6,6 +6,7 @@ const MONITORS = [
   { id: "school", name: "School", url: "https://school.wesselsmit.com/" },
   { id: "filedrop", name: "Filedrop", url: "https://files.wesselsmit.com/" },
   { id: "tools", name: "Tools", url: "https://tools.wesselsmit.com/" },
+  { id: "writeups", name: "Write-ups", url: "https://writeups.wesselsmit.com/" },
 ];
 
 const STATE_KEY = "state";
