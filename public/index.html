@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Status · Wessel Smit</title>
-  <meta name="description" content="Actuele status en uptime van de sites van Wessel Smit.">
+  <meta name="description" content="Current status and uptime of Wessel Smit's sites.">
   <meta name="theme-color" content="#0b0c0e">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230b0c0e'/><path d='M18 28h14l8 38 10-38h0l10 38 8-38h14L68 76H56L50 52 44 76H32Z' fill='%23ff5a1f'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -307,6 +307,24 @@
     .brand-text { overflow: hidden; text-overflow: ellipsis; }
     .brand .crumb { color: var(--muted); font-weight: 400; }
 
+    .nav-right { display: flex; align-items: center; gap: 0.25rem; flex: none; }
+
+    .lang-toggle {
+      display: flex;
+      gap: 0.6ch;
+      font: inherit;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: #4a5059;
+      background: none;
+      border: 0;
+      padding: 0.35rem 0.6rem;
+      cursor: pointer;
+    }
+
+    .lang-toggle span.on { color: var(--accent); }
+    .lang-toggle:hover { background: var(--panel); color: var(--muted); }
+
     .back {
       font-size: 0.72rem;
       letter-spacing: 0.1em;
@@ -429,7 +447,10 @@
   <header class="nav">
     <nav class="nav-inner" aria-label="Navigatie">
       <a href="https://wesselsmit.com/" class="brand"><span class="brand-mark" aria-hidden="true">W</span><span class="brand-text">WESSEL SMIT <span class="crumb">/ STATUS</span></span></a>
-      <a href="https://wesselsmit.com/" class="back">← portfolio</a>
+      <div class="nav-right">
+        <button class="lang-toggle" type="button" data-lang-toggle><span data-lang="en">EN</span><span data-lang="nl">NL</span></button>
+        <a href="https://wesselsmit.com/" class="back">← portfolio</a>
+      </div>
     </nav>
   </header>
 
@@ -441,7 +462,7 @@
 
     <div class="summary" id="summary" role="status" aria-live="polite">
       <span class="dot" aria-hidden="true"></span>
-      <strong id="summary-text">Status laden…</strong>
+      <strong id="summary-text">Loading status…</strong>
       <span class="meta" id="summary-meta"></span>
     </div>
 
@@ -449,27 +470,28 @@
 
     <p class="note">
       <span class="legend"><i style="background: var(--green)"></i>online</span>
-      <span class="legend"><i style="background: var(--amber)"></i>deels verstoord</span>
-      <span class="legend"><i style="background: var(--red)"></i>storing</span>
-      <span class="legend"><i style="background: var(--empty)"></i>geen data</span>
-      <br>Elke 5 minuten gemeten vanaf Cloudflare. Elk blokje is één dag.
+      <span class="legend"><i style="background: var(--amber)"></i><span data-nl="deels verstoord">degraded</span></span>
+      <span class="legend"><i style="background: var(--red)"></i><span data-nl="storing">outage</span></span>
+      <span class="legend"><i style="background: var(--empty)"></i><span data-nl="geen data">no data</span></span>
+      <br><span data-nl="Elke 5 minuten gemeten vanaf Cloudflare. Elk blokje is één dag.">Checked every 5 minutes from Cloudflare. Each block is one day.</span>
     </p>
   </main>
 
   <footer>© <span id="year"></span> Wessel Smit</footer>
 
+  <script src="/i18n.js"></script>
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
     const LABELS = {
       up: "Online",
-      degraded: "Traag",
-      down: "Storing",
-      unknown: "Nog geen meting",
+      degraded: L("Slow", "Traag"),
+      down: L("Outage", "Storing"),
+      unknown: L("No checks yet", "Nog geen meting"),
     };
 
-    const dateFmt = new Intl.DateTimeFormat("nl-NL", { day: "numeric", month: "short", year: "numeric" });
-    const timeFmt = new Intl.DateTimeFormat("nl-NL", { hour: "2-digit", minute: "2-digit" });
+    const dateFmt = new Intl.DateTimeFormat(LOCALE(), { day: "numeric", month: "short", year: "numeric" });
+    const timeFmt = new Intl.DateTimeFormat(LOCALE(), { hour: "2-digit", minute: "2-digit" });
 
     function currentState(m) {
       if (!m.last) return "unknown";
@@ -493,9 +515,9 @@
 
     function ago(iso) {
       const s = Math.round((Date.now() - new Date(iso)) / 1000);
-      if (s < 60) return "zojuist";
+      if (s < 60) return L("just now", "zojuist");
       const m = Math.round(s / 60);
-      if (m < 60) return m + " min geleden";
+      if (m < 60) return m + L(" min ago", " min geleden");
       return timeFmt.format(new Date(iso));
     }
 
@@ -542,31 +564,31 @@
         bars.className = "bars";
         bars.style.setProperty("--n", n);
         bars.setAttribute("role", "img");
-        bars.setAttribute("aria-label", `Uptime ${m.name} afgelopen ${n} dagen: ${formatPct(up, total)}`);
+        bars.setAttribute("aria-label", L(`Uptime ${m.name} over the last ${n} days: ${formatPct(up, total)}`, `Uptime ${m.name} afgelopen ${n} dagen: ${formatPct(up, total)}`));
         for (const k of dayKeys) {
           const d = days[k];
           const bar = document.createElement("span");
           bar.className = "bar " + dayState(d);
           const label = dateFmt.format(new Date(k + "T12:00:00Z"));
-          bar.title = d && d.total ? `${label}: ${formatPct(d.up, d.total)} (${d.total} metingen)` : `${label}: geen data`;
+          bar.title = d && d.total ? `${label}: ${formatPct(d.up, d.total)} (${d.total} ${L("checks", "metingen")})` : `${label}: ${L("no data", "geen data")}`;
           bars.appendChild(bar);
         }
         el.appendChild(bars);
 
         const foot = document.createElement("div");
         foot.className = "bars-foot";
-        foot.innerHTML = `<span>${n} dagen geleden</span><span class="uptime">${formatPct(up, total)} uptime</span><span>vandaag</span>`;
+        foot.innerHTML = `<span>${L(`${n} days ago`, `${n} dagen geleden`)}</span><span class="uptime">${formatPct(up, total)} uptime</span><span>${L("today", "vandaag")}</span>`;
         el.appendChild(foot);
 
         const stats = document.createElement("div");
         stats.className = "stats";
         const parts = [];
         if (m.last) {
-          parts.push(`laatste check <b>${ago(m.last.t)}</b>`);
+          parts.push(`${L("last check", "laatste check")} <b>${ago(m.last.t)}</b>`);
           parts.push(`http <b>${m.last.code || m.last.error || "–"}</b>`);
-          parts.push(`responstijd <b>${m.last.ms} ms</b>`);
+          parts.push(`${L("response time", "responstijd")} <b>${m.last.ms} ms</b>`);
         }
-        if (avgMs !== null) parts.push(`gem. 4 uur <b>${avgMs} ms</b>`);
+        if (avgMs !== null) parts.push(`${L("avg. 4 hours", "gem. 4 uur")} <b>${avgMs} ms</b>`);
         stats.innerHTML = parts.map((p) => `<span>${p}</span>`).join("");
         el.appendChild(stats);
 
@@ -584,12 +606,12 @@
       summary.className = "summary " + overall;
       const downCount = states.filter((s) => s === "down").length;
       text.textContent = {
-        up: "Alle systemen operationeel",
-        degraded: "Sommige systemen reageren traag",
-        down: downCount === 1 ? "1 systeem heeft een storing" : `${downCount} systemen hebben een storing`,
-        unknown: "Nog geen metingen, de eerste volgt binnen 5 minuten",
+        up: L("All systems operational", "Alle systemen operationeel"),
+        degraded: L("Some systems are responding slowly", "Sommige systemen reageren traag"),
+        down: downCount === 1 ? L("1 system has an outage", "1 systeem heeft een storing") : L(`${downCount} systems have an outage`, `${downCount} systemen hebben een storing`),
+        unknown: L("No checks yet, the first one follows within 5 minutes", "Nog geen metingen, de eerste volgt binnen 5 minuten"),
       }[overall];
-      document.getElementById("summary-meta").textContent = data.updated ? "bijgewerkt " + ago(data.updated) : "";
+      document.getElementById("summary-meta").textContent = data.updated ? L("updated ", "bijgewerkt ") + ago(data.updated) : "";
     }
 
     async function load() {
@@ -599,7 +621,7 @@
         render(await res.json());
       } catch {
         document.getElementById("summary").className = "summary down";
-        document.getElementById("summary-text").textContent = "Kon de status niet ophalen";
+        document.getElementById("summary-text").textContent = L("Couldn't fetch the status", "Kon de status niet ophalen");
       }
     }
 
